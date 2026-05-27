@@ -1,0 +1,157 @@
+  ЭТАП 2. ПРОЕКТИРОВАНИЕ НА ЯЗЫКЕ HDL (RTL DESIGN)
+  Проект: специализированное процессорное ядро (Verilog, архитектура Harvard)
+1. СТАТУС ВЫПОЛНЕНИЯ ЭТАПА 2
+Этап 2 выполнен: аппаратная реализация процессора описана на языке Verilog
+в папке rtl/. Исходники компилируются и проходят модульные и интеграционные
+testbench (см. SIMULATION_GUIDE.md, папка tb/, папка sim/).
+Результат: исходники .v    Да    rtl/*.v, rtl/isa_defs.vh
+2. СТРУКТУРА RTL-ПРОЕКТА (МОДУЛЬНОСТЬ)
+2.1. Обязательные модули (по заданию)
+  Файл              Имя модуля        Назначение
+  ----------------  ----------------  ----------------------------------------
+  rtl/alu.v         alu               Арифметико-логическое устройство
+  rtl/reg_file.v    register_file     Регистровый файл 8x16
+  rtl/control_unit.v control_unit     Блок управления + конечный автомат
+  rtl/top_cpu.v     top_cpu           Верхний модуль (сборка datapath)
+2.2. Вспомогательные модули (для полной Harvard-архитектуры)
+  Файл              Имя модуля        Назначение
+  ----------------  ----------------  ----------------------------------------
+  rtl/pc.v          program_counter   Счётчик команд (PC)
+  rtl/instr_mem.v   instruction_memory Память команд (ROM)
+  rtl/data_mem.v    data_memory       Память данных (RAM)
+  rtl/isa_defs.vh   (include)         Общие константы ISA и ALU
+2.3. Иерархия
+  top_cpu
+Связь между модулями — через внутренние wire в top_cpu.v (шина команд,
+управляющие сигналы, данные ALU, адреса памяти).
+3. ВЕРХНИЙ МОДУЛЬ top_cpu (TOP_MODULE)
+Файл: rtl/top_cpu.v
+Входы:
+  - clk     — тактовый сигнал
+  - rst_n   — асинхронный сброс (активный низкий уровень)
+Выходы (для отладки и testbench):
+  - pc_out      — текущий адрес команды
+  - instr_out   — текущая 16-битная инструкция
+  - state_out   — состояние упрощённого автомата control_unit
+Функции top_cpu:
+  - разбор полей инструкции (opcode, DR, SR1, SR2, immediate);
+  - выбор второго операнда ALU (регистр / imm6 / imm9 для LDI);
+  - мультиплексор данных для записи в регистр (ALU / память / LDI);
+  - регистр флага zero_flag_reg для команды BEQ.
+4. МОДУЛЬ ALU
+Файл: rtl/alu.v
+Тип: комбинационный блок (always @(*)).
+Входы:
+  - a[15:0], b[15:0] — операнды
+  - alu_op[3:0]      — код операции (из isa_defs.vh)
+Выходы:
+  - result[15:0]     — результат
+  - zero_flag        — 1, если result == 0
+Поддерживаемые операции:
+  ADD, SUB, AND, OR, XOR, NOT, PASS_A, PASS_B.
+Использование в datapath:
+  - арифметика и логика R-типа;
+  - вычисление адреса R[SR1] + imm6 для LOAD/STORE;
+  - формирование zero_flag для ветвления.
+5. МОДУЛЬ REGISTER_FILE
+Файл: rtl/reg_file.v
+Имя модуля: register_file
+Параметры: 8 регистров по 16 бит.
+Порты:
+  - read_addr1, read_addr2  — адреса чтения
+  - write_addr, write_data  — адрес и данные записи
+  - reg_write               — разрешение записи (от control_unit)
+Особенности:
+  - запись: синхронная, posedge clk, асинхронный сброс rst_n;
+  - чтение: комбинационное (assign);
+  - R0 всегда 0 при чтении, запись в R0 блокируется.
+6. МОДУЛЬ CONTROL_UNIT (КОНЕЧНЫЙ АВТОМАТ)
+Файл: rtl/control_unit.v
+6.1. Назначение
+  Декодирование opcode и формирование управляющих сигналов:
+    pc_load, pc_next, reg_write, mem_write, alu_op, alu_src_b_sel.
+6.2. Состояния автомата (FSM)
+  Состояние          Код      Смысл (упрощённая модель)
+  -----------------  -------  ------------------------------------------
+  FETCH_STATE        2'b00    Фаза выборки / подготовки
+  EXECUTE_STATE      2'b01    Фаза исполнения
+Переходы (синхронно по posedge clk):
+  - после сброса: FETCH;
+  - FETCH -> EXECUTE -> FETCH -> ... (чередование каждый такт).
+Выход state_debug подключён к state_out верхнего модуля для наблюдения
+в симуляции.
+6.3. Логика управления
+  Комбинационный always @(*) с case(opcode) задаёт значения управляющих
+  сигналов в зависимости от текущей инструкции.
+Примечание для отчёта:
+  В проекте реализован рабочий конечный автомат из двух фаз. Это упрощение
+  по сравнению с полным многоцикловым автоматом (FETCH/DECODE/EXECUTE/
+  MEM/WRITEBACK), но требование «Control_Unit (конечный автомат)» выполнено:
+  есть регистр состояния и правила переходов.
+7. СИНХРОННАЯ ЛОГИКА И СБРОС
+Модуль    Тактирование    Сброс
+program_counter    posedge clk    async negedge rst_n
+register_file    posedge clk (запись)    async negedge rst_n
+data_memory    posedge clk (запись)    —
+control_unit (FSM)    posedge clk (state_debug)    async negedge rst_n
+top_cpu (z_flag)    posedge clk    async negedge rst_n
+alu    комбинационный    —
+instruction_memory    чтение комбинационное    initial (симуляция)
+Общий принцип:
+  - регистры и память с записью обновляются по фронту clk;
+  - сброс rst_n активен при низком уровне (0);
+  - после сброса PC = 0, регистры обнуляются, автомат в FETCH.
+Память команд (instr_mem) для симуляции загружается из tb/program.hex
+в блоке initial — типичный приём для testbench, на этапе синтеза может
+быть заменён на ROM/IP-блок.
+8. ДОПОЛНИТЕЛЬНЫЕ RTL-МОДУЛИ
+8.1. program_counter (rtl/pc.v)
+  - pc_current <= pc_next при pc_load;
+  - иначе инкремент на 1;
+  - сброс в 0.
+8.2. instruction_memory (rtl/instr_mem.v)
+  - ROM 256 x 16;
+  - асинхронное чтение: instr = rom[addr];
+  - загрузка программы: $readmemh("tb/program.hex", ...).
+8.3. data_memory (rtl/data_mem.v)
+  - RAM 256 x 16;
+  - синхронная запись при mem_write;
+  - асинхронное чтение на выход read_data.
+  data_memory (addr от ALU, данные от регистра)
+Harvard: отдельные instr_mem и data_mem.
+9. РЕЗУЛЬТАТ ЭТАПА 2 — ИСХОДНЫЕ ФАЙЛЫ
+Основной deliverable этапа 2:
+  rtl/
+    alu.v
+    reg_file.v
+    control_unit.v
+    top_cpu.v
+    pc.v
+    instr_mem.v
+    data_mem.v
+    isa_defs.vh
+Связанные материалы (этап 3, не являются RTL, но подтверждают работоспособность):
+  tb/          — testbench
+  sim/         — артефакты симуляции
+  SIMULATION_GUIDE.md — инструкция по запуску
+10. ПРОВЕРКА РАБОТОСПОСОБНОСТИ RTL
+Модульные тесты:
+  tb/tb_pc.v, tb/tb_reg_file.v, tb/tb_data_mem.v,
+  tb/tb_instr_mem.v, tb/tb_control_unit.v
+Интеграционный тест:
+  tb/tb_top_cpu.v — выполнение программы из tb/program.hex,
+  итог: Top-level simulation PASSED.
+Команда (WSL, из корня проекта):
+  iverilog -g2012 -I rtl -o sim/simv tb/tb_top_cpu.v rtl/*.v && vvp sim/simv
+11. ВЫВОД ДЛЯ ОТЧЁТА ПО ЭТАПУ 2
+На этапе 2 выполнено RTL-описание процессорного ядра на Verilog: созданы
+обязательные модули ALU, register_file, control_unit с конечным автоматом
+и top_cpu, а также модули PC и раздельных памятей команд и данных в рамках
+архитектуры Harvard. Используется синхронная запись по такту и асинхронный
+сброс. Исходный код снабжён базовыми комментариями и организован модульно.
+Работоспособность подтверждена симуляцией.
+Для отчёта рекомендуется приложить:
+  - этот файл (docs/ETAP2_RTL_DESIGN.txt);
+  - блок-схему из раздела 2.3;
+  - листинги rtl/top_cpu.v, rtl/control_unit.v, rtl/alu.v, rtl/reg_file.v;
+  - скриншот или фрагмент лога «Top-level simulation PASSED».

@@ -1,0 +1,71 @@
+$date
+	Wed May 27 14:03:13 2026
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module tb_pc $end
+$var wire 16 ! pc_current [15:0] $end
+$var reg 1 " clk $end
+$var reg 1 # pc_load $end
+$var reg 16 $ pc_next [15:0] $end
+$var reg 1 % rst_n $end
+$scope module uut $end
+$var wire 1 " clk $end
+$var wire 1 # pc_load $end
+$var wire 16 & pc_next [15:0] $end
+$var wire 1 % rst_n $end
+$var reg 16 ' pc_current [15:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b0 '
+b0 &
+0%
+b0 $
+0#
+0"
+b0 !
+$end
+#5000
+1"
+#10000
+0"
+1%
+#15000
+b1 !
+b1 '
+1"
+#20000
+0"
+#25000
+b10 !
+b10 '
+1"
+#26000
+b1000010 $
+b1000010 &
+1#
+#30000
+0"
+#35000
+b1000010 !
+b1000010 '
+1"
+#36000
+0#
+#40000
+0"
+#45000
+b1000011 !
+b1000011 '
+1"
+#46000

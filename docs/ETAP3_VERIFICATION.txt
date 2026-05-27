@@ -1,0 +1,36 @@
+  ЭТАП 3. ВЕРИФИКАЦИЯ И СИМУЛЯЦИЯ (VERIFICATION)
+1. ФАЙЛЫ TESTBENCH
+  tb/tb_pc.v              — модуль program_counter
+  tb/tb_reg_file.v        — регистровый файл
+  tb/tb_data_mem.v        — память данных
+  tb/tb_instr_mem.v       — память команд + program.hex
+  tb/tb_control_unit.v    — блок управления
+  tb/tb_alu.v             — ALU (отдельная проверка)
+  tb/tb_top_cpu.v         — интеграционный тест всего ядра
+  tb/program.hex          — тестовая машинная программа
+2. СЦЕНАРИЙ ИНТЕГРАЦИОННОЙ ПРОВЕРКИ (tb_top_cpu)
+Шаг 1. Загрузка программы
+  При старте симуляции instruction_memory (rtl/instr_mem.v) выполняет
+  $readmemh("tb/program.hex", rom) и загружает инструкции в память команд.
+Шаг 2. Такт и сброс
+  Testbench генерирует clk (период 10 нс).
+  rst_n = 0 в течение 10 нс, затем rst_n = 1 — процессор начинает работу.
+Шаг 3. Запуск процессора
+  PC читает команды, control_unit декодирует, выполняются операции.
+  В консоль печатаются cycle, pc, instr, регистры R1..R7, MEM[1].
+Шаг 4. Проверка результатов
+  Ожидаемые значения после программы:
+    R1=5, R2=3, R3=8, R4=8, R5=0, R6=0, R7=7, MEM[1]=8, PC=9
+  При совпадении: "Top-level simulation PASSED."
+3. КАК ЗАПУСТИТЬ ВСЮ ВЕРИФИКАЦИЮ
+Из WSL-терминала в корне проекта:
+  chmod +x sim/run_verification.sh
+  ./sim/run_verification.sh
+Или:
+  bash sim/run_verification.sh
+Результаты:
+  - sim/simulation.log   — полный лог всех тестов
+  - sim/*.vcd            — временные диаграммы
+  - sim/pc_tb, simv, ... — исполняемые файлы симулятора
+Один интеграционный тест вручную:
+  iverilog -g2012 -I rtl -o sim/simv tb/tb_top_cpu.v rtl/*.v && vvp sim/simv
