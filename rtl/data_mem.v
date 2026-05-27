@@ -24,4 +24,7 @@ module data_memory (
     // Асинхронное чтение (или синхронное – зависит от реализации)
     assign read_data = ram[addr];
 
+    // Пробный сигнал для VCD/GTKWave (ячейка RAM[1] из тестовой программы)
+    wire [15:0] dbg_ram1 = ram[1];
+
 endmodule

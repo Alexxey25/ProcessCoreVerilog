@@ -1,0 +1,40 @@
+  ЭТАП 5. ПРОГРАММНО-АППАРАТНАЯ ИНТЕГРАЦИЯ
+  Проект: top_cpu (Harvard, Verilog)
+1. СТРУКТУРА ФАЙЛОВ
+  tools/assembler.py           — простейший ассемблер ISA
+  software/sum_series.asm      — тест: сумма 1+2+...+10
+  software/fibonacci.asm       — доп. пример (числа Фибоначчи)
+  software/sum_series.lst      — листинг (адрес, код, мнемоника)
+  tb/program_stage5.hex        — машинный код для симуляции
+  tb/tb_stage5_sum.v           — testbench с проверкой R2=55
+  sim/run_stage5.sh            — сборка + запуск одной командой
+  sim/stage5_simulation.log    — лог прогона
+  sim/tb_stage5_sum.vcd        — осциллограмма для GTKWave
+2. КАК СОБРАТЬ ПРОГРАММУ
+  Из корня проекта:
+    python tools/assembler.py software/sum_series.asm ^
+        -o tb/program_stage5.hex ^
+        --listing software/sum_series.lst
+  Linux / WSL:
+    python3 tools/assembler.py software/sum_series.asm \
+        -o tb/program_stage5.hex \
+        --listing software/sum_series.lst
+  Поддерживаемые команды: add, sub, and, or, xor, not, ldi, load, store,
+  jump, beq, nop. Метки: loop:, halt:. Регистры: r0..r7 (r0 всегда 0).
+3. КАК ПРОВЕРИТЬ НА СПРОЕКТИРОВАННОМ ЯДРЕ
+    bash sim/run_stage5.sh
+4. ЧТО ДЕЛАЕТ ТЕСТОВАЯ ПРОГРАММА
+  sum_series.asm:
+    - N = 10 в R1, сумма в R2, счётчик i в R3
+    - Цикл: sum += i; i++; counter--
+    - Выход по BEQ когда counter == 0
+    - Ожидаемый результат: R2 = 55, R1 = 0, R3 = 11, PC = 9 (halt)
+  fibonacci.asm (опционально):
+    - Вычисляет F(10) = 55 в R3 (для отчёта можно сравнить с суммой ряда)
+5. РЕЗУЛЬТАТЫ
+Исходник: software/sum_series.asm
+Ассемблер: tools/assembler.py
+Машинный код: tb/program_stage5.hex + software/sum_series.lst
+Доказательство: sim/stage5_simulation.log (PASSED)
+Скриншот GTKWave или фрагмент лога с R2=55
+Краткое описание в отчёте (1–2 страницы)

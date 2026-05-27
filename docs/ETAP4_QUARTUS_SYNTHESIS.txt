@@ -1,0 +1,2 @@
+  ЭТАП 4. СИНТЕЗ И РЕАЛИЗАЦИЯ (Intel Quartus Prime)
+  Проект: top_cpu (Harvard, Verilog)

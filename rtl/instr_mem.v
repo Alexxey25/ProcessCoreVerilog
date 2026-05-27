@@ -10,7 +10,15 @@ module instruction_memory (
     initial begin
         for (i = 0; i < 256; i = i + 1)
             rom[i] = 16'h0000;
-        $readmemh("tb/program.hex", rom, 0, 9);
+`ifdef PROGRAM_HEX_FILE
+        $readmemh(`PROGRAM_HEX_FILE, rom);
+`elsif QUARTUS_SYNTH
+        // Quartus: cwd = quartus/top_cpu_quartus/
+        $readmemh("../../tb/program.hex", rom);
+`else
+        // Icarus: cwd = корень verilogProject/
+        $readmemh("tb/program.hex", rom);
+`endif
     end
 
     always @(*) begin

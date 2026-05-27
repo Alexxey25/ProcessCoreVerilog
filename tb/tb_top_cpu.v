@@ -21,17 +21,24 @@ module tb_top_cpu;
     initial begin
         $dumpfile("sim/tb_top_cpu.vcd");
         $dumpvars(0, tb_top_cpu);
+        // Явный дамп внутренних регистров и памяти для GTKWave
+        $dumpvars(0, uut.regfile.dbg_r1, uut.regfile.dbg_r3, uut.regfile.dbg_r7);
+        $dumpvars(0, uut.dmem.dbg_ram1);
 
-        $display("=== Top CPU test start ===");
-        $display("Block purpose: integrates PC, instruction memory, control unit, register file, ALU and data memory.");
-        $display("The CPU executes the program from tb/program.hex and we observe register and memory changes.");
+        $display("=== Top CPU verification scenario ===");
+        $display("[STEP 1] Program load: instruction_memory loads tb/program.hex via $readmemh on startup.");
+        $display("[STEP 2] Clock and reset: clk period 10 ns, rst_n active-low for 10 ns then released.");
+        $display("[STEP 3] Run CPU: execute loaded program and monitor registers and data memory.");
+        $display("[STEP 4] Check results: compare R1..R7, MEM[1], PC against expected values.");
 
         clk = 0;
         rst_n = 0;
         errors = 0;
         cycle = 0;
 
-        #10 rst_n = 1;
+        #10;
+        $display("[STEP 2] Reset released, processor running.");
+        rst_n = 1;
 
         repeat(16) begin
             @(posedge clk);

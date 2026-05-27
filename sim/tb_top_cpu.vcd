@@ -1,5 +1,5 @@
 $date
-	Sat Apr 11 20:32:45 2026
+	Wed May 27 20:05:43 2026
 $end
 $version
 	Icarus Verilog
@@ -70,35 +70,39 @@ $upscope $end
 $scope module dmem $end
 $var wire 16 M addr [15:0] $end
 $var wire 1 $ clk $end
+$var wire 16 N dbg_ram1 [15:0] $end
 $var wire 1 7 mem_write $end
-$var wire 16 N read_data [15:0] $end
-$var wire 16 O write_data [15:0] $end
-$var integer 32 P i [31:0] $end
+$var wire 16 O read_data [15:0] $end
+$var wire 16 P write_data [15:0] $end
+$var integer 32 Q i [31:0] $end
 $upscope $end
 $scope module imem $end
-$var wire 16 Q addr [15:0] $end
-$var reg 16 R instr [15:0] $end
-$var integer 32 S i [31:0] $end
+$var wire 16 R addr [15:0] $end
+$var reg 16 S instr [15:0] $end
+$var integer 32 T i [31:0] $end
 $upscope $end
 $scope module pc $end
 $var wire 1 $ clk $end
 $var wire 1 4 pc_load $end
-$var wire 16 T pc_next [15:0] $end
+$var wire 16 U pc_next [15:0] $end
 $var wire 1 % rst_n $end
-$var reg 16 U pc_current [15:0] $end
+$var reg 16 V pc_current [15:0] $end
 $upscope $end
 $scope module regfile $end
 $var wire 1 $ clk $end
-$var wire 3 V read_addr1 [2:0] $end
-$var wire 3 W read_addr2 [2:0] $end
+$var wire 16 W dbg_r1 [15:0] $end
+$var wire 16 X dbg_r3 [15:0] $end
+$var wire 16 Y dbg_r7 [15:0] $end
+$var wire 3 Z read_addr1 [2:0] $end
+$var wire 3 [ read_addr2 [2:0] $end
 $var wire 1 / reg_write $end
 $var wire 1 % rst_n $end
-$var wire 3 X write_addr [2:0] $end
-$var wire 16 Y write_data [15:0] $end
-$var wire 16 Z read_data2 [15:0] $end
-$var wire 16 [ read_data1 [15:0] $end
+$var wire 3 \ write_addr [2:0] $end
+$var wire 16 ] write_data [15:0] $end
+$var wire 16 ^ read_data2 [15:0] $end
+$var wire 16 _ read_data1 [15:0] $end
 $scope begin $unm_blk_34 $end
-$var integer 32 \ i [31:0] $end
+$var integer 32 ` i [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -111,19 +115,23 @@ b1 H
 $end
 #0
 $dumpvars
-b1000 \
+b1000 `
+b0 _
+b0 ^
+b101 ]
+b1 \
 b0 [
 b0 Z
-b101 Y
-b1 X
+b0 Y
+b0 X
 b0 W
 b0 V
 b0 U
-b0 T
-b100000000 S
-b111001000000101 R
-b0 Q
-b100000000 P
+b100000000 T
+b111001000000101 S
+b0 R
+b100000000 Q
+b0 P
 b0 O
 b0 N
 b101 M
@@ -171,7 +179,7 @@ b0 "
 b0 !
 $end
 #5000
-b1000 \
+b1000 `
 1$
 #10000
 0$
@@ -181,13 +189,13 @@ b11 >
 b11 E
 b11 M
 b11 +
-b11 Y
+b11 ]
 b11 @
 b11 B
 b11 :
 b11 ;
 b10 <
-b10 X
+b10 \
 b1101 ?
 b1101 C
 b1101 J
@@ -196,15 +204,16 @@ b111010000000011 #
 b111010000000011 (
 b111010000000011 9
 b111010000000011 G
-b111010000000011 R
+b111010000000011 S
 b1 "
 b1 )
 b1 5
-b1 Q
-b1 U
+b1 R
+b1 V
 b1 !
 b1 ,
 b1 L
+b101 W
 1$
 #16000
 b1 &
@@ -212,18 +221,18 @@ b1 &
 0$
 #25000
 b1000 +
-b1000 Y
+b1000 ]
 b11 0
-b11 O
-b11 Z
+b11 P
+b11 ^
 b1000 >
 b1000 E
 b1000 M
 b10 2
-b10 W
+b10 [
 b101 1
 b101 D
-b101 [
+b101 _
 b11 @
 b11 B
 b1 F
@@ -231,9 +240,9 @@ b1010000 :
 b10000 ;
 b10 -
 b1 .
-b1 V
+b1 Z
 b11 <
-b11 X
+b11 \
 b1 6
 b1 ?
 b1 C
@@ -243,15 +252,15 @@ b1011001010000 #
 b1011001010000 (
 b1011001010000 9
 b1011001010000 G
-b1011001010000 R
+b1011001010000 S
 b0 !
 b0 ,
 b0 L
 b10 "
 b10 )
 b10 5
-b10 Q
-b10 U
+b10 R
+b10 V
 1$
 #26000
 b10 &
@@ -259,43 +268,44 @@ b10 &
 0$
 #35000
 b1 +
-b1 Y
+b1 ]
 b1 @
 b1 B
 b1 >
 b1 E
 b1 M
 b1000 0
-b1000 O
-b1000 Z
+b1000 P
+b1000 ^
 1=
 17
 b0 1
 b0 D
-b0 [
+b0 _
 b11 2
-b11 W
+b11 [
 b110 F
 b1 :
 b1 ;
 b0 -
 b0 .
-b0 V
+b0 Z
 b110 6
 0/
 b110011000000001 #
 b110011000000001 (
 b110011000000001 9
 b110011000000001 G
-b110011000000001 R
+b110011000000001 S
 b11 "
 b11 )
 b11 5
-b11 Q
-b11 U
+b11 R
+b11 V
 b1 !
 b1 ,
 b1 L
+b1000 X
 1$
 #36000
 b11 &
@@ -303,16 +313,16 @@ b11 &
 0$
 #45000
 b0 0
-b0 O
-b0 Z
+b0 P
+b0 ^
 1/
 b0 2
-b0 W
+b0 [
 b1000 +
-b1000 Y
+b1000 ]
 b101 F
 b100 <
-b100 X
+b100 \
 b101 6
 1=
 07
@@ -320,16 +330,17 @@ b101100000000001 #
 b101100000000001 (
 b101100000000001 9
 b101100000000001 G
-b101100000000001 R
+b101100000000001 S
 b0 !
 b0 ,
 b0 L
 b100 "
 b100 )
 b100 5
-b100 Q
-b100 U
+b100 R
+b100 V
 b1000 8
+b1000 O
 b1000 N
 1$
 #46000
@@ -339,10 +350,10 @@ b100 &
 #55000
 1*
 b1000 0
-b1000 O
-b1000 Z
+b1000 P
+b1000 ^
 b0 8
-b0 N
+b0 O
 b0 >
 b0 E
 b0 M
@@ -352,20 +363,20 @@ b10 ?
 b10 C
 b10 J
 b11 2
-b11 W
+b11 [
 b1000 1
 b1000 D
-b1000 [
+b1000 _
 b0 +
-b0 Y
+b0 ]
 b10 F
 b1111111100011000 :
 b11000 ;
 b11 -
 b100 .
-b100 V
+b100 Z
 b101 <
-b101 X
+b101 \
 b10 6
 0=
 1/
@@ -373,12 +384,12 @@ b10101100011000 #
 b10101100011000 (
 b10101100011000 9
 b10101100011000 G
-b10101100011000 R
+b10101100011000 S
 b101 "
 b101 )
 b101 5
-b101 Q
-b101 U
+b101 R
+b101 V
 b1 !
 b1 ,
 b1 L
@@ -391,31 +402,31 @@ b101 &
 b101 @
 b101 B
 b101 +
-b101 Y
+b101 ]
 b101 0
-b101 O
-b101 Z
+b101 P
+b101 ^
 0*
 b101 >
 b101 E
 b101 M
 b1000 3
 b1000 K
-b1000 T
+b1000 U
 14
 b1 2
-b1 W
+b1 [
 b0 1
 b0 D
-b0 [
+b0 _
 b1001 F
 b1000 :
 b1000 ;
 b1 -
 b0 .
-b0 V
+b0 Z
 b0 <
-b0 X
+b0 \
 b1001 6
 b1 ?
 b1 C
@@ -425,7 +436,7 @@ b1001000000001000 #
 b1001000000001000 (
 b1001000000001000 9
 b1001000000001000 G
-b1001000000001000 R
+b1001000000001000 S
 1A
 b0 !
 b0 ,
@@ -433,8 +444,8 @@ b0 L
 b110 "
 b110 )
 b110 5
-b110 Q
-b110 U
+b110 R
+b110 V
 1$
 #66000
 b110 &
@@ -442,47 +453,47 @@ b110 &
 0$
 #75000
 b111 +
-b111 Y
+b111 ]
 b111 >
 b111 E
 b111 M
 b11 @
 b11 B
 b11 0
-b11 O
-b11 Z
+b11 P
+b11 ^
 b100 ?
 b100 C
 b100 J
 1/
 b10 2
-b10 W
+b10 [
 b101 1
 b101 D
-b101 [
+b101 _
 b100 F
 b1010000 :
 b10000 ;
 b10 -
 b1 .
-b1 V
+b1 Z
 b111 <
-b111 X
+b111 \
 b100 6
 b0 3
 b0 K
-b0 T
+b0 U
 04
 b100111001010000 #
 b100111001010000 (
 b100111001010000 9
 b100111001010000 G
-b100111001010000 R
+b100111001010000 S
 b1000 "
 b1000 )
 b1000 5
-b1000 Q
-b1000 U
+b1000 R
+b1000 V
 b1 !
 b1 ,
 b1 L
@@ -495,30 +506,30 @@ b111 &
 b101 @
 b101 B
 b101 +
-b101 Y
+b101 ]
 b101 0
-b101 O
-b101 Z
+b101 P
+b101 ^
 b101 >
 b101 E
 b101 M
 b1001 3
 b1001 K
-b1001 T
+b1001 U
 14
 b1 2
-b1 W
+b1 [
 b0 1
 b0 D
-b0 [
+b0 _
 b1000 F
 b1001 :
 b1001 ;
 b1 -
 b0 .
-b0 V
+b0 Z
 b0 <
-b0 X
+b0 \
 b1000 6
 b1 ?
 b1 C
@@ -528,7 +539,8 @@ b1000000000001001 #
 b1000000000001001 (
 b1000000000001001 9
 b1000000000001001 G
-b1000000000001001 R
+b1000000000001001 S
+b111 Y
 0A
 b0 !
 b0 ,
@@ -536,8 +548,8 @@ b0 L
 b1001 "
 b1001 )
 b1001 5
-b1001 Q
-b1001 U
+b1001 R
+b1001 V
 1$
 #86000
 b1000 &

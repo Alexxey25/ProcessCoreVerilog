@@ -31,4 +31,9 @@ module register_file (
     assign read_data1 = (read_addr1 == 3'd0) ? 16'd0 : registers[read_addr1];
     assign read_data2 = (read_addr2 == 3'd0) ? 16'd0 : registers[read_addr2];
 
+    // Пробные сигналы для VCD/GTKWave (массив registers в .vcd не всегда виден)
+    wire [15:0] dbg_r1 = registers[1];
+    wire [15:0] dbg_r3 = registers[3];
+    wire [15:0] dbg_r7 = registers[7];
+
 endmodule

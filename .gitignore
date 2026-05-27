@@ -1,0 +1,17 @@
+# Intel Quartus — build/cache (do not commit; lock files block git while Quartus is open)
+quartus/**/db/
+quartus/**/incremental_db/
+quartus/**/output_files/
+quartus/**/*.flock
+quartus/**/*.qws
+quartus/**/*.bak
+
+# Simulation artifacts
+sim/*.vcd
+sim/*_tb
+sim/simv
+sim/stage5_simv
+sim/*.log
+
+# Local doc backups
+docs/_orig/
