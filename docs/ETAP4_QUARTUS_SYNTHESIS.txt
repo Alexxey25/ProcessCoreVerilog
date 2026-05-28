@@ -1,2 +1,43 @@
-  ЭТАП 4. СИНТЕЗ И РЕАЛИЗАЦИЯ (Intel Quartus Prime)
-  Проект: top_cpu (Harvard, Verilog)
+ЭТАП 4. СИНТЕЗ И РЕАЛИЗАЦИЯ В ПЛИС (Intel Quartus Prime)
+
+Цель этапа: трансляция RTL-описания ядра top_cpu в конфигурацию микросхемы MAX 10 и получение отчёта по ресурсам и времени.
+
+Инструмент и проект
+
+Использован Intel Quartus Prime Lite 25.1 (семейство Intel/Altera, не Xilinx Vivado).
+Проект: quartus/top_cpu_quartus/top_cpu_quartus.qpf.
+Верхняя сущность: top_cpu (файлы только из каталога rtl, без testbench).
+Микросхема: 10M08DAF484C8G (MAX 10).
+Ограничения такта: quartus/constraints/top_cpu.sdc, create_clock период 20 нс (50 МГц).
+
+Соответствие элементам синтеза из методички
+
+LUT (комбинационная логика): учитывается в отчёте как Logic elements (комбинационная часть).
+Flip-Flop (последовательная логика): Dedicated logic registers в fit.summary.
+Block RAM: в учебной RTL память команд и данных описана массивами reg; синтез дал 0 memory bits — размещение в LE, не в M10K. Для отчёта указать честно и при необходимости — путь к program.mif / IP ROM в будущей доработке.
+DSP: не используется (в ISA нет умножения/умножителя).
+
+Результаты по ресурсам (fit.summary)
+
+Logic elements: 5624 из 8064 (70%).
+Combinational functions: 3457.
+Dedicated logic registers: 4242.
+Memory bits: 0.
+Embedded multipliers: 0.
+Статус компиляции: Successful.
+
+Анализ времени (Timing Analyzer)
+
+Задано ограничение clk 50 МГц (20 нс).
+Setup slack (Slow 85C): отрицательный, порядка -21 нс — при 50 МГц ограничение не выполняется.
+Для пояснительной записки: привести Fmax Summary из Quartus после компиляции и указать, что для стабильной работы следует снизить частоту в .sdc или оптимизировать критический путь.
+Критические пути: раздел Timing Analyzer, Report Timing Analysis, Worst-Case Timing Paths (скриншот в отчёт).
+
+Что приложить к защите
+
+Скриншот Flow Summary (Successful).
+Таблица ресурсов LUT/FF/BRAM из fit.summary.
+Скриншот Fmax Summary или фрагмент sta.rpt.
+Краткий вывод: ядро помещается в ПЛИС по площади (~70% LE); запас по частоте при 50 МГц требует уточнения по отчёту времени.
+
+Связь с docs/PROJECT_REQUIREMENTS_COMPLIANCE.txt — полная таблица соответствия методичке.

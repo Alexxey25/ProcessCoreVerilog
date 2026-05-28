@@ -20,6 +20,7 @@ module control_unit (
 
     wire [3:0] opcode = instruction[15:12];
 
+    // Регистр состояний FSM (переходы Moore: только от текущего state)
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             state_debug <= FETCH_STATE;
@@ -29,6 +30,7 @@ module control_unit (
             state_debug <= FETCH_STATE;
     end
 
+    // Комбинационная логика выходов (Mealy: opcode, zero_flag; см. PROJECT_REQUIREMENTS_COMPLIANCE.txt)
     always @(*) begin
         pc_load = 1'b0;
         pc_next = 16'd0;
