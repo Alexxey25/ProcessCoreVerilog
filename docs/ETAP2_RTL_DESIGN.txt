@@ -72,7 +72,6 @@ testbench (см. SIMULATION_GUIDE.md, папка tb/, папка sim/).
     pc_load, pc_next, reg_write, mem_write, alu_op, alu_src_b_sel.
 6.2. Состояния автомата (FSM)
   Состояние          Код      Смысл (упрощённая модель)
-  -----------------  -------  ------------------------------------------
   FETCH_STATE        2'b00    Фаза выборки / подготовки
   EXECUTE_STATE      2'b01    Фаза исполнения
 Переходы (синхронно по posedge clk):
@@ -143,19 +142,7 @@ Harvard: отдельные instr_mem и data_mem.
   tb/tb_pc.v, tb/tb_reg_file.v, tb/tb_data_mem.v,
   tb/tb_instr_mem.v, tb/tb_control_unit.v
 Интеграционный тест:
-  tb/tb_top_cpu.v — выполнение программы из tb/program.hex,
+  tb/tb_top_cpu.v — sum_series из tb/program.hex (R2=55),
   итог: Top-level simulation PASSED.
 Команда (WSL, из корня проекта):
   iverilog -g2012 -I rtl -o sim/simv tb/tb_top_cpu.v rtl/*.v && vvp sim/simv
-11. ВЫВОД ДЛЯ ОТЧЁТА ПО ЭТАПУ 2
-На этапе 2 выполнено RTL-описание процессорного ядра на Verilog: созданы
-обязательные модули ALU, register_file, control_unit с конечным автоматом
-и top_cpu, а также модули PC и раздельных памятей команд и данных в рамках
-архитектуры Harvard. Используется синхронная запись по такту и асинхронный
-сброс. Исходный код снабжён базовыми комментариями и организован модульно.
-Работоспособность подтверждена симуляцией.
-Для отчёта рекомендуется приложить:
-  - этот файл (docs/ETAP2_RTL_DESIGN.txt);
-  - блок-схему из раздела 2.3;
-  - листинги rtl/top_cpu.v, rtl/control_unit.v, rtl/alu.v, rtl/reg_file.v;
-  - скриншот или фрагмент лога «Top-level simulation PASSED».

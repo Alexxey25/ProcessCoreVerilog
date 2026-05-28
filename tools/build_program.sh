@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Assemble one FASM program -> tb/*.hex
-# Usage: tools/build_program.sh software/sum_series.asm [tb/program_stage5.hex]
+# Usage: tools/build_program.sh software/sum_series.asm [tb/program.hex]
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

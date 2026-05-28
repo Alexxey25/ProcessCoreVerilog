@@ -1,11 +1,5 @@
-; sum_series.asm — 1 + 2 + ... + 10 = 55  (результат в R2)
-; Сборка: fasm software/sum_series.asm
-
 format binary as 'rom.bin'
 include 'cpu.inc'
-
-    org 0
-
     LDI r1, 10          ; счётчик
     LDI r2, 0           ; сумма
     LDI r3, 1           ; текущее i

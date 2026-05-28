@@ -1,20 +1,20 @@
 -- Memory Initialization File for instruction ROM (Quartus)
--- Source: tb/program.hex
+-- Source: tb/program.hex (sum_series.asm, FASM)
 DEPTH = 256;
 WIDTH = 16;
 ADDRESS_RADIX = UNS;
 DATA_RADIX = HEX;
 CONTENT
 BEGIN
-    0  : 7205;
-    1  : 7403;
-    2  : 1650;
-    3  : 6601;
-    4  : 5801;
-    5  : 2B18;
-    6  : 9008;
-    7  : 7C01;
-    8  : 4E50;
+    0  : 720A;
+    1  : 7400;
+    2  : 7601;
+    3  : 1498;
+    4  : 7801;
+    5  : 16E0;
+    6  : 2260;
+    7  : 9009;
+    8  : 8003;
     9  : 8009;
     [10..255]  : 0000;
 END;

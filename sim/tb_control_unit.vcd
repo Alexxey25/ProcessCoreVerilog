@@ -1,5 +1,5 @@
 $date
-	Thu May 28 14:29:53 2026
+	Thu May 28 21:30:42 2026
 $end
 $version
 	Icarus Verilog
@@ -25,40 +25,38 @@ $var wire 16 , instruction [15:0] $end
 $var wire 1 * rst_n $end
 $var wire 1 + zero_flag $end
 $var wire 4 - opcode [3:0] $end
-$var wire 1 . execute_phase $end
-$var parameter 2 / EXECUTE_STATE $end
-$var parameter 2 0 FETCH_STATE $end
-$var reg 4 1 alu_op [3:0] $end
+$var parameter 2 . EXECUTE_STATE $end
+$var parameter 2 / FETCH_STATE $end
+$var reg 4 0 alu_op [3:0] $end
 $var reg 1 & alu_src_b_sel $end
 $var reg 1 % mem_write $end
 $var reg 1 $ pc_load $end
-$var reg 16 2 pc_next [15:0] $end
+$var reg 16 1 pc_next [15:0] $end
 $var reg 1 " reg_write $end
-$var reg 2 3 state_debug [1:0] $end
+$var reg 2 2 state_debug [1:0] $end
 $upscope $end
 $scope task test_instruction $end
-$var reg 4 4 expected_alu_op [3:0] $end
-$var reg 1 5 expected_mem_write $end
-$var reg 1 6 expected_reg_write $end
-$var reg 16 7 instr [15:0] $end
+$var reg 4 3 expected_alu_op [3:0] $end
+$var reg 1 4 expected_mem_write $end
+$var reg 1 5 expected_reg_write $end
+$var reg 16 6 instr [15:0] $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b0 0
-b1 /
+b0 /
+b1 .
 $end
 #0
 $dumpvars
-bx 7
-x6
+bx 6
 x5
-bx 4
-b0 3
+x4
+bx 3
 b0 2
-b1 1
-0.
+b0 1
+b1 0
 b0 -
 b0 ,
 0+
@@ -76,139 +74,114 @@ $end
 #5000
 1(
 #10000
+1"
 b1 -
 0(
 b1001010011000 )
 b1001010011000 ,
-b1 4
-05
-16
-b1001010011000 7
+b1 3
+04
+15
+b1001010011000 6
 1*
 #15000
-1"
-1.
 b1 !
-b1 3
+b1 2
 1(
 #20000
 0(
 #25000
-0"
-0.
 b0 !
-b0 3
+b0 2
 1(
 #30000
 0(
 #35000
-1"
-1.
 b1 !
-b1 3
+b1 2
 1(
 #40000
 0(
 #45000
-0"
-0.
 b0 !
-b0 3
+b0 2
 1(
 #46000
+1&
+1"
 b101 -
 b101100101000001 )
 b101100101000001 ,
-b101100101000001 7
+b101100101000001 6
 #50000
 0(
 #55000
-1&
-1"
-1.
 b1 !
-b1 3
+b1 2
 1(
 #60000
 0(
 #65000
-0&
-0"
-0.
 b0 !
-b0 3
+b0 2
 1(
 #70000
 0(
 #75000
-1&
-1"
-1.
 b1 !
-b1 3
+b1 2
 1(
 #80000
 0(
 #85000
-0&
-0"
-0.
 b0 !
-b0 3
+b0 2
 1(
 #86000
+1%
+1&
+0"
 b110 -
 b110110111000001 )
 b110110111000001 ,
-15
-06
-b110110111000001 7
+14
+05
+b110110111000001 6
 #90000
 0(
 #95000
-1&
-1%
-1.
 b1 !
-b1 3
+b1 2
 1(
 #100000
 0(
 #105000
-0&
-0%
-0.
 b0 !
-b0 3
+b0 2
 1(
 #110000
 0(
 #115000
-1&
-1%
-1.
 b1 !
-b1 3
+b1 2
 1(
 #120000
 0(
 #125000
-0&
-0%
-0.
 b0 !
-b0 3
+b0 2
 1(
 #126000
+1$
+0&
+0%
 b1000 -
 b1000000000000000 )
 b1000000000000000 ,
 #130000
 0(
 #135000
-1$
-1.
 b1 !
-b1 3
+b1 2
 1(
 #136000
